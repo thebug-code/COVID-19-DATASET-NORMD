@@ -41,11 +41,11 @@ flask --app SAGTMA init-db
 flask --app SAGTMA --debug run
 ```
 
-5. ¡Listo! La aplicación ahora debería estar en funcionamiento en <http://localhost:5000>. -->
+5. ¡Listo! La aplicación ahora debería estar en funcionamiento en <http://localhost:5000>.
 
 ## Construido con
 
 - [Flask](https://flask.palletsprojects.com/en/2.0.x/) - El framework utilizado.
 - [SQLite3](https://www.sqlite.org/index.html) - El motor de base de datos utilizado.
-- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/) - El ORM utilizado.
+- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/) - El ORM utilizado. -->
 
