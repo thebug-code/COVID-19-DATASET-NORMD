@@ -64,6 +64,11 @@ psql \
       -d "${PGDATABASE}" \
       -a -f "base_table.sql"
 
+psql \
+      -U "${PGUSER}" \
+      -d "${PGDATABASE}" \
+      -a -f "normd_final_model.sql"
+
 # filename="$( dirname -- "$( readlink -f -- "$0"; )"; )"/owid-covid-data.csv""
 
 # Copiar el conjunto de datos COVID-19 a la tabla base
@@ -71,6 +76,12 @@ psql \
       -U "${PGUSER}" \
       -d "${PGDATABASE}" \
       -c "\\copy base_table from 'owid-covid-data.csv' (format 'csv', header, quote '\"')"
+
+# Inserta los valores a la tabla base a cada conjunto de datos
+psql \
+      -U "${PGUSER}" \
+      -d "${PGDATABASE}" \
+      -a -f "normd_final_model_insr.sql"
 
 # Inicia el servidor
 psql \
