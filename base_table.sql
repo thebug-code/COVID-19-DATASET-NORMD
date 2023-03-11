@@ -1,9 +1,12 @@
+-- Tabla base con todo el conjunto de datos
+
+-- Si la tabla ya existe se elimina
 DROP TABLE IF EXISTS BASE_TABLE;
 
 CREATE TABLE BASE_TABLE (
-        iso_code varchar(100), 
-        continent varchar(220), 
-        location varchar(220), 
+        iso_code varchar(20), 
+        continent varchar(150), 
+        location varchar(150), 
         date Date, 
         total_cases DECIMAL, 
         new_cases DECIMAL, 
