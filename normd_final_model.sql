@@ -1,5 +1,19 @@
 -- Tablas para cada conjunto de datos relacionados
 
+
+-- Si las tablas existen se eliminan
+DROP TABLE IF EXISTS CONFIRMED_CASES;
+DROP TABLE IF EXISTS CONFIRMED_DEATHS;
+DROP TABLE IF EXISTS EXCESS_MORTALITY;
+DROP TABLE IF EXISTS HOSPITAL_ICU;
+DROP TABLE IF EXISTS POLICY_RESPONSES(;
+DROP TABLE IF EXISTS REPRODUCTION_RATE;
+DROP TABLE IF EXISTS TESTS_POSITIVITY;
+DROP TABLE IF EXISTS VACCINATIONS;
+DROP TABLE IF EXISTS DATE_OBSERVATION;
+DROP TABLE IF EXISTS COUNTRY_SPECIFICATIONS;
+
+
 -- Casos confirmados
 CREATE TABLE CONFIRMED_CASES(
         conf_case_id SERIAL PRIMARY KEY,
@@ -20,7 +34,7 @@ CREATE TABLE CONFIRMED_DEATHS(
         new_deaths_smoothed DECIMAL,
         total_deaths_per_million DECIMAL,
         new_deaths_per_million DECIMAL,
-        new_deaths_smoothed_per_million DECIMAL
+        new_deaths_smoothed_per_million DECIMAL,
 );
 
 
