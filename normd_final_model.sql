@@ -20,7 +20,7 @@ CREATE TABLE CONFIRMED_DEATHS(
         new_deaths_smoothed DECIMAL,
         total_deaths_per_million DECIMAL,
         new_deaths_per_million DECIMAL,
-        new_deaths_smoothed_per_million DECIMAL,
+        new_deaths_smoothed_per_million DECIMAL
 );
 
 
@@ -30,7 +30,7 @@ CREATE TABLE EXCESS_MORTALITY(
         excess_mortality DECIMAL,
         excess_mortality_cumulative DECIMAL,
         excess_mortality_absolute DECIMAL,
-        excess_motality_cumulative_per_million DECIMAL,
+        excess_motality_cumulative_per_million DECIMAL
 );
 
 
@@ -44,7 +44,7 @@ CREATE TABLE HOSPITAL_ICU(
         weekly_icu_admissions DECIMAL,
         weekly_icu_admissions_per_million DECIMAL,
         weekly_hosp_admissions DECIMAL,
-        weekly_hosp_admissions_per_million DECIMAL,
+        weekly_hosp_admissions_per_million DECIMAL
 );
 
 
