@@ -20,7 +20,7 @@ CREATE TABLE CONFIRMED_DEATHS(
         new_deaths_smoothed DECIMAL,
         total_deaths_per_million DECIMAL,
         new_deaths_per_million DECIMAL,
-        new_deaths_smoothed_per_million DECIMAL
+        new_deaths_smoothed_per_million DECIMAL,
 );
 
 
@@ -125,3 +125,87 @@ CREATE COUNTRY_SPECIFICATIONS(
         life_expectancy DECIMAL,
         human_development_index DECIMAL
 );        
+
+
+-- Anade las relaciones de cada conjunto de datos con su
+-- fecha de observacion
+
+
+-- Relación entre DATE_OBSERVATION y CONFIRMED_CASES
+ALTER TABLE CONFIRMED_CASES 
+        ADD COLUMN date_obs_id INTEGER;
+
+ALTER TABLE CONFIRMED_CASES 
+        ADD CONSTRAINT fk_confirmed_cases_date_obs 
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre DATE_OBSERVATION y CONFIRMED_DEATHS
+ALTER TABLE CONFIRMED_DEATHS
+        ADD COLUMN date_obs_id INTEGER;
+
+ALTER TABLE CONFIRMED_DEATHS
+        ADD CONSTRAINT fk_confirmed_deaths_date_obs
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre DATE_OBSERVATION y EXCESS_MORTALITY
+ALTER TABLE EXCESS_MORTALITY
+        ADD COLUMN date_obs_id INTEGER;
+
+ALTER TABLE EXCESS_MORTALITY
+        ADD CONSTRAINT fk_excess_mortality_date_obs
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre DATE_OBSERVATION y HOSPITAL_ICU
+ALTER TABLE HOSPITAL_ICU
+        ADD COLUMN date_obs_id INTEGER;
+
+ALTER TABLE HOSPITAL_ICU 
+        ADD CONSTRAINT fk_hospital_icu_date_obs
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre DATE_OBSERVATION y POLICY_RESPONSES
+ALTER TABLE POLICY_RESPONSES
+        ADD COLUMN date_obs_id INTEGER;
+
+ALTER TABLE POLICY_RESPONSES
+        ADD CONSTRAINT fk_policy_responses_date_obs
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre DATE_OBSERVATION y REPRODUCTION_RATE
+ALTER TABLE REPRODUCTION_RATE
+        ADD COLUMN date_obs_id INTEGER;
+
+ALTER TABLE REPRODUCTION_RATE 
+        ADD CONSTRAINT fk_reproduction_rate_date_obs
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre DATE_OBSERVATION y TESTS_POSITIVITY
+ALTER TABLE TESTS_POSITIVITY
+        ADD COLUMN date_obs_id INTEGER;
+
+ALTER TABLE TESTS_POSITIVITY 
+        ADD CONSTRAINT fk_tests_positivity_date_obs
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre DATE_OBSERVATION y VACCINATIONS
+ALTER TABLE VACCINATIONS 
+        ADD COLUMN date_id INTEGER;
+
+ALTER TABLE VACCINATIONS 
+        ADD CONSTRAINT fk_vaccinations_date_obs
+        FOREIGN KEY (date_obs_id) REFERENCES
+        DATE_OBSERVATION (date_obs_id);
