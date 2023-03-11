@@ -209,3 +209,54 @@ ALTER TABLE VACCINATIONS
         ADD CONSTRAINT fk_vaccinations_date_obs
         FOREIGN KEY (date_obs_id) REFERENCES
         DATE_OBSERVATION (date_obs_id);
+
+
+-- Relación entre COUNTRY_SPECIFICATIONS y todas las demás tablas
+
+ALTER TABLE CONFIRMED_CASES ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE CONFIRMED_CASES 
+        ADD CONSTRAINT fk_confirmed_cases_country_iso_code 
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+
+ALTER TABLE CONFIRMED_DEATHS ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE CONFIRMED_DEATHS 
+        ADD CONSTRAINT fk_confirmed_deaths_country_iso_code 
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+
+ALTER TABLE EXCESS_MORTALITY ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE EXCESS_MORTALITY 
+        ADD CONSTRAINT fk_excess_mortality_country_iso_code 
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+
+ALTER TABLE HOSPITAL_ICU ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE HOSPITAL_ICU 
+        ADD CONSTRAINT fk_hospital_icu_country_iso_code 
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+
+ALTER TABLE POLICY_RESPONSES ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE POLICY_RESPONSES 
+        ADD CONSTRAINT fk_policy_responses_country_iso_code 
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+
+ALTER TABLE REPRODUCTION_RATE ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE REPRODUCTION_RATE 
+        ADD CONSTRAINT fk_reproduction_rate_country_iso_code 
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+
+ALTER TABLE TESTS_POSITIVITY ADD COLUMN country_iso_code VARCHAR(15);
+        ALTER TABLE TESTS_POSITIVITY 
+        ADD CONSTRAINT fk_tests_positivity_country_iso_code 
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+
+ALTER TABLE VACCINATIONS ADD COLUMN country_iso_code VARCHAR(15);
+        ALTER TABLE VACCINATIONS 
+        ADD CONSTRAINT fk_vaccinations_country_iso_code
+        FOREIGN KEY (country_iso_code) 
+        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
