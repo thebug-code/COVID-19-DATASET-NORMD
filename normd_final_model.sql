@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS CONFIRMED_CASES;
 DROP TABLE IF EXISTS CONFIRMED_DEATHS;
 DROP TABLE IF EXISTS EXCESS_MORTALITY;
 DROP TABLE IF EXISTS HOSPITAL_ICU;
-DROP TABLE IF EXISTS POLICY_RESPONSES(;
+DROP TABLE IF EXISTS POLICY_RESPONSES;
 DROP TABLE IF EXISTS REPRODUCTION_RATE;
 DROP TABLE IF EXISTS TESTS_POSITIVITY;
 DROP TABLE IF EXISTS VACCINATIONS;
@@ -34,7 +34,7 @@ CREATE TABLE CONFIRMED_DEATHS(
         new_deaths_smoothed DECIMAL,
         total_deaths_per_million DECIMAL,
         new_deaths_per_million DECIMAL,
-        new_deaths_smoothed_per_million DECIMAL,
+        new_deaths_smoothed_per_million DECIMAL
 );
 
 
@@ -112,14 +112,14 @@ CREATE TABLE VACCINATIONS(
 
 -- Tabla intermediara entre el p-enesimo pais y su conjuntos de datos
 -- en la f-enesima fecha de observacion 
-CREATE DATE_OBSERVATION(
+CREATE TABLE DATE_OBSERVATION(
         date_obs_id SERIAL PRIMARY KEY,
         date DATE
 );
 
 
 -- Carecteristicas/especificaciones de los paises
-CREATE COUNTRY_SPECIFICATIONS(
+CREATE TABLE COUNTRY_SPECIFICATIONS(
         country_id SERIAL PRIMARY KEY,
         iso_code varchar(15),
         continent varchar(150),
@@ -218,12 +218,12 @@ ALTER TABLE TESTS_POSITIVITY
 
 -- Relación entre DATE_OBSERVATION y VACCINATIONS
 ALTER TABLE VACCINATIONS 
-        ADD COLUMN date_id INTEGER;
+        ADD COLUMN date_obs_id INTEGER;
 
 ALTER TABLE VACCINATIONS 
         ADD CONSTRAINT fk_vaccinations_date_obs
-        FOREIGN KEY (date_obs_id) REFERENCES
-        DATE_OBSERVATION (date_obs_id);
+        FOREIGN KEY (date_obs_id) 
+        REFERENCES DATE_OBSERVATION (date_obs_id);
 
 
 -- Anade las relaciones de cada pais con cada conjunto de datos
