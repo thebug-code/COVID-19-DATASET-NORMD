@@ -77,7 +77,7 @@ psql \
       -d "${PGDATABASE}" \
       -c "\\copy base_table from 'owid-covid-data.csv' (format 'csv', header, quote '\"')"
 
-# Inserta los valores a la tabla base a cada conjunto de datos
+# Inserta los valores de la tabla base a cada conjunto de datos
 psql \
       -U "${PGUSER}" \
       -d "${PGDATABASE}" \
