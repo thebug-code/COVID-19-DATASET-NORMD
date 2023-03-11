@@ -2,6 +2,7 @@
 
 -- Casos confirmados
 CREATE TABLE CONFIRMED_CASES(
+        conf_case_id SERIAL PRIMARY KEY,
         total_cases DECIMAL,
         new_cases DECIMAL,
         new_cases_smoothed DECIMAL,
@@ -13,6 +14,7 @@ CREATE TABLE CONFIRMED_CASES(
 
 -- Muertes confirmadas
 CREATE TABLE CONFIRMED_DEATHS(
+        conf_death_id SERIAL PRIMARY KEY,
         total_deaths DECIMAL,
         new_deaths DECIMAL,
         new_deaths_smoothed DECIMAL,
@@ -24,6 +26,7 @@ CREATE TABLE CONFIRMED_DEATHS(
 
 -- Exceso de mortalidad
 CREATE TABLE EXCESS_MORTALITY(
+        xs_mort_id SERIAL PRIMARY KEY,
         excess_mortality DECIMAL,
         excess_mortality_cumulative DECIMAL,
         excess_mortality_absolute DECIMAL,
@@ -33,6 +36,7 @@ CREATE TABLE EXCESS_MORTALITY(
 
 -- Hospital y Unidad de Cuidados Intensivos
 CREATE TABLE HOSPITAL_ICU(
+        hosp_icu_id SERIAL PRIMARY KEY,
         icu_patients DECIMAL,
         icu_patients_per_million DECIMAL,
         hosp_patients DECIMAL,
@@ -46,17 +50,20 @@ CREATE TABLE HOSPITAL_ICU(
 
 -- Respuestas políticas
 CREATE TABLE POLICY_RESPONSES(
+        policy_resp_id SERIAL PRIMARY KEY,
         strindency_index DECIMAL
 );
 
 
 -- Tasa de reproduccion
 CREATE TABLE REPRODUCTION_RATE(
+        reprod_rate_id SERIAL PRIMARY KEY,
         reproduction_rate DECIMAL
 );
 
 -- Pruebas y positividad
 CREATE TABLE TESTS_POSITIVITY(
+        test_post_id SERIAL PRIMARY KEY,
         total_tests DECIMAL,
         new_tests DECIMAL,
         total_tests_per_thousand DECIMAL,
@@ -71,6 +78,7 @@ CREATE TABLE TESTS_POSITIVITY(
 
 -- Vacunas
 CREATE TABLE VACCINATIONS(
+        vaccine_id SERIAL PRIMARY KEY,
         total_vaccinations DECIMAL,
         people_vaccinated DECIMAL,
         people_fully_vaccinated DECIMAL,
@@ -90,12 +98,14 @@ CREATE TABLE VACCINATIONS(
 -- Tabla intermediara entre el p-enesimo pais y su conjuntos de datos
 -- en la f-enesima fecha de observacion 
 CREATE DATE_OBSERVATION(
+        date_obs_id SERIAL PRIMARY KEY,
         date DATE
 );
 
 
 -- Carecteristicas/especificaciones de los paises
 CREATE COUNTRY_SPECIFICATIONS(
+        country_id SERIAL PRIMARY KEY,
         iso_code varchar(15),
         continent varchar(150),
         location varchar(150),
