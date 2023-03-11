@@ -43,8 +43,8 @@ CREATE TABLE EXCESS_MORTALITY(
         xs_mort_id SERIAL PRIMARY KEY,
         excess_mortality DECIMAL,
         excess_mortality_cumulative DECIMAL,
-        excess_mortality_absolute DECIMAL,
-        excess_motality_cumulative_per_million DECIMAL
+        excess_mortality_cumulative_absolute DECIMAL,
+        excess_mortality_cumulative_per_million DECIMAL
 );
 
 
@@ -65,7 +65,7 @@ CREATE TABLE HOSPITAL_ICU(
 -- Respuestas políticas
 CREATE TABLE POLICY_RESPONSES(
         policy_resp_id SERIAL PRIMARY KEY,
-        strindency_index DECIMAL
+        stringency_index DECIMAL
 );
 
 
@@ -100,7 +100,6 @@ CREATE TABLE VACCINATIONS(
         total_boosters DECIMAL,
         new_vaccinations DECIMAL,
         new_vaccinations_smoothed DECIMAL,
-        total_vaccinations_smoothed DECIMAL,
         total_vaccinations_per_hundred DECIMAL,
         people_fully_vaccinated_per_hundred DECIMAL,
         total_boosters_per_hundred DECIMAL,
