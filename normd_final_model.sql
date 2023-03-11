@@ -213,50 +213,57 @@ ALTER TABLE VACCINATIONS
 
 -- Relación entre COUNTRY_SPECIFICATIONS y todas las demás tablas
 
-ALTER TABLE CONFIRMED_CASES ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE CONFIRMED_CASES ADD COLUMN country_id INTEGER;
 ALTER TABLE CONFIRMED_CASES 
-        ADD CONSTRAINT fk_confirmed_cases_country_iso_code 
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_confirmed_cases_country_id 
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
 
-ALTER TABLE CONFIRMED_DEATHS ADD COLUMN country_iso_code VARCHAR(15);
+
+ALTER TABLE CONFIRMED_DEATHS ADD COLUMN country_id INTEGER;
 ALTER TABLE CONFIRMED_DEATHS 
-        ADD CONSTRAINT fk_confirmed_deaths_country_iso_code 
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_confirmed_deaths_country_id 
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
 
-ALTER TABLE EXCESS_MORTALITY ADD COLUMN country_iso_code VARCHAR(15);
+
+ALTER TABLE EXCESS_MORTALITY ADD COLUMN country_id INTEGER;
 ALTER TABLE EXCESS_MORTALITY 
-        ADD CONSTRAINT fk_excess_mortality_country_iso_code 
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_excess_mortality_country_id 
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
 
-ALTER TABLE HOSPITAL_ICU ADD COLUMN country_iso_code VARCHAR(15);
+
+ALTER TABLE HOSPITAL_ICU ADD COLUMN country_id INTEGER;
 ALTER TABLE HOSPITAL_ICU 
-        ADD CONSTRAINT fk_hospital_icu_country_iso_code 
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_hospital_icu_country_id 
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
 
-ALTER TABLE POLICY_RESPONSES ADD COLUMN country_iso_code VARCHAR(15);
+
+ALTER TABLE POLICY_RESPONSES ADD COLUMN country_id INTEGER;
 ALTER TABLE POLICY_RESPONSES 
-        ADD CONSTRAINT fk_policy_responses_country_iso_code 
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_policy_responses_country_id 
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
 
-ALTER TABLE REPRODUCTION_RATE ADD COLUMN country_iso_code VARCHAR(15);
+
+ALTER TABLE REPRODUCTION_RATE ADD COLUMN country_id INTEGER;
 ALTER TABLE REPRODUCTION_RATE 
-        ADD CONSTRAINT fk_reproduction_rate_country_iso_code 
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_reproduction_rate_country_id 
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
 
-ALTER TABLE TESTS_POSITIVITY ADD COLUMN country_iso_code VARCHAR(15);
+
+ALTER TABLE TESTS_POSITIVITY ADD COLUMN country_id INTEGER;
         ALTER TABLE TESTS_POSITIVITY 
-        ADD CONSTRAINT fk_tests_positivity_country_iso_code 
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_tests_positivity_country_id 
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
+        
 
-ALTER TABLE VACCINATIONS ADD COLUMN country_iso_code VARCHAR(15);
+ALTER TABLE VACCINATIONS ADD COLUMN country_id INTEGER;
         ALTER TABLE VACCINATIONS 
-        ADD CONSTRAINT fk_vaccinations_country_iso_code
-        FOREIGN KEY (country_iso_code) 
-        REFERENCES COUNTRY_SPECIFICATIONS (iso_code);
+        ADD CONSTRAINT fk_vaccinations_country_id
+        FOREIGN KEY (country_id) 
+        REFERENCES COUNTRY_SPECIFICATIONS (country_id);
