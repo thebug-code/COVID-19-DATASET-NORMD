@@ -8,60 +8,57 @@ then
 fi
 
 #!/bin/bash
+# Lee el nombre de usuario de PostgreSQL para conectarse
+read -p "Username [postgres]: " USER
 
-# Pedimos al usuario el nombre del usuario de PostgreSQL
-echo "Introduce el nombre del usuario de PostgreSQL:"
-read username
-
-# Pedimos al usuario el puerto (por defecto es 5432)
-echo "Introduce el puerto (por defecto es 5432):"
-read port
-
-read -p "Server [localhost]: " host
-
-if [ -z "$host" ];
+if [ -z "$USER" ];
 then
-    host="localhost"
+    echo "Por favor ingrese el nombre de usuario de PostgreSQL"
+    exit 1
 fi
 
-# Si el usuario no especifica un puerto, usamos el puerto por defecto (5432)
-if [ -z "$port" ]; then
-  port=5432
+# Lee la contraseña que se utilizará si el servidor exige la autenticación de contraseña
+read -sp "Password: " password
+echo '\n'
+if [ -z "$password" ];
+then
+    echo "Por favor ingrese la contrasena del usuario de PostgreSQL "
+    exit 1
 fi
+
+port='5432'
+host='localhost'
 
 # Verificamos si el usuario existe en PostgreSQL
-if PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -tAc "SELECT 1 FROM pg_roles WHERE rolname='$username'" postgres | grep -q 1; then
+if PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -tAc "SELECT 1 FROM pg_roles WHERE rolname='$USER'" postgres | grep -q 1; then
     echo "El usuario ya existe en PostgreSQL"
     # Verificamos si el usuario puede crear bases de datos
-    if PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -c "CREATE DATABASE test;" postgres; then
+    if PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "CREATE DATABASE test;" postgres; then
         echo "El usuario tiene permisos para crear bases de datos"
-        PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -c "GRANT CREATE, CONNECT ON DATABASE test TO $username;" postgres
+        PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "GRANT CREATE, CONNECT ON DATABASE test TO $USER;" postgres
     else
         echo "El usuario no tiene permisos para crear bases de datos"
     fi
 else
     echo "El usuario no existe en PostgreSQL. Creando el usuario..."
-    # Pedimos al usuario la contraseña para el nuevo usuario
-    echo "Introduce la contraseña para el nuevo usuario:"
-    read -s password
 
     # Creamos el nuevo usuario con los permisos necesarios
-    PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -c "CREATE ROLE $username WITH LOGIN PASSWORD '$password' CREATEDB CREATEROLE;" postgres
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "CREATE ROLE $USER WITH LOGIN PASSWORD '$password' CREATEDB CREATEROLE;" postgres
 
     # Otorgamos permisos para crear bases de datos
-    PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -c "GRANT CREATE, CONNECT ON DATABASE test TO $username;" postgres
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "GRANT CREATE, CONNECT ON DATABASE test TO $USER;" postgres
 
     # Otorgamos permisos para crear tablas
-    PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO $username;" postgres
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO $USER;" postgres
 
     # Otorgamos permisos para logearse
-    PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -c "ALTER ROLE $username WITH LOGIN;" postgres
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "ALTER ROLE $USER WITH LOGIN;" postgres
 
-    echo "El usuario $username ha sido creado en PostgreSQL con los permisos necesarios"
+    echo "El usuario $USER ha sido creado en PostgreSQL con los permisos necesarios"
 fi
 
 # Eliminamos la base de datos de prueba
-PGPASSWORD=$PGPASSWORD psql -U postgres -h localhost -p $port -c "DROP DATABASE IF EXISTS test;" postgres
+PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "DROP DATABASE IF EXISTS test;" postgres
 
 if [ ! -f "owid-covid-data.csv" ]
 then
@@ -71,21 +68,38 @@ else
     echo "El archivo 'owid-covid-data.csv' ya existe."
 fi
 
-# Creamos la base de datos covid_base con el usuario $username
-#createdb -h $host -p $port -U $username covid_base
+PGDATABASE='BDP1_1810536_1610109'
+PGUSER="${USER}"
+PGPASSWORD="${password}"
 
-# Desloguear usuario si está conectado a la base de datos
+# Elimina la base de datos si existe
+dropdb \
+      -U "${PGUSER}" \
+      --if-exists \
+      "${PGDATABASE}"
 
-# Creamos la base de datos covid_base con el usuario especificado
-dropdb -h $host -p $port -U $username covid_base
+# Crea la base de datos
+createdb \
+        -O "${PGUSER}" \
+        -U "${PGUSER}" \
+        "${PGDATABASE}"
 
-createdb -h $host -p $port covid_base
+# Importa y lee los *.sql
+psql \
+      -U "${PGUSER}" \
+      -d "${PGDATABASE}" \
+      -a -f "base_table.sql"
 
-echo "La base de datos covid_base ha sido creada."
+psql \
+      -U "${PGUSER}" \
+      -d "${PGDATABASE}" \
+      -a -f "normd_final_model.sql"
+
+echo "La base de datos $PGDATABASE ha sido creada."
 
 
 # Cargamos los datos del archivo owid-covid-data.csv en la tabla covid_data
-psql -h $host -p $port -U $username -d covid_base -c "DROP TABLE IF EXISTS public.covid_table; CREATE TABLE public.covid_table (
+psql -h $host -p $port -U $PGUSER -d $PGDATABASE -c "DROP TABLE IF EXISTS public.base_table; CREATE TABLE public.base_table (
     iso_code varchar(100), 
     continent varchar(220), 
     location varchar(220), 
@@ -156,4 +170,4 @@ psql -h $host -p $port -U $username -d covid_base -c "DROP TABLE IF EXISTS publi
 );"
 
 
-psql -h $host -p $port -U $username -d covid_base -c "\copy public.covid_table FROM 'owid-covid-data.csv' DELIMITER ',' CSV HEADER;"
+psql -h $host -p $port -U $USER -d $PGDATABASE -c "\copy public.base_table FROM 'owid-covid-data.csv' DELIMITER ',' CSV HEADER;"
