@@ -20,13 +20,49 @@ then
 fi
 
 # Lee la contraseña que se utilizará si el servidor exige la autenticación de contraseña
-read -sp "Password: " PASSWORD
-
-if [ -z "$PASSWORD" ];
+read -sp "Password: " password
+echo '\\n'
+if [ -z "$password" ];
 then
     echo "Por favor ingrese la contrasena del usuario de PostgreSQL"
     exit 1
 fi
+
+port='5432'
+host='localhost'
+
+# Verificamos si el usuario existe en PostgreSQL
+if PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -tAc "SELECT 1 FROM pg_roles WHERE rolname='$USER'" postgres | grep -q 1; then
+    echo "El usuario ya existe en PostgreSQL"
+    # Verificamos si el usuario puede crear bases de datos
+    if PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "CREATE DATABASE test;" postgres; then
+        echo "El usuario tiene permisos para crear bases de datos"
+        PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "GRANT CREATE, CONNECT ON DATABASE test TO $USER;" postgres
+    else
+        echo "El usuario no tiene permisos para crear bases de datos"
+    fi
+else
+    echo "El usuario no existe en PostgreSQL. Creando el usuario..."
+
+    # Creamos el nuevo usuario con los permisos necesarios
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "CREATE ROLE $USER WITH LOGIN PASSWORD '$password' CREATEDB CREATEROLE;" postgres
+    
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "CREATE DATABASE test;" postgres
+    # Otorgamos permisos para crear bases de datos
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "GRANT CREATE, CONNECT ON DATABASE test TO $USER;" postgres
+
+    # Otorgamos permisos para crear tablas
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO $USER;" postgres
+
+    # Otorgamos permisos para logearse
+    PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "ALTER ROLE $USER WITH LOGIN;" postgres
+
+    echo "El usuario $USER ha sido creado en PostgreSQL con los permisos necesarios"
+fi
+
+# Eliminamos la base de datos de prueba
+PGPASSWORD=$PGPASSWORD psql -U postgres -h $host -p $port -c "DROP DATABASE IF EXISTS test;" postgres
+
 
 # Verifica si hay que descargar el dataset
 if [ -f owid-covid-data.csv ] 
@@ -41,7 +77,7 @@ fi
 
 # Configura las variables del entorno
 PGUSER="${USER}"
-PGPASSWORD="${PASSWORD}"
+PGPASSWORD="${password}"
 PGPORT='5432'
 PGHOST='localhost'
 PGDATABASE='BDP1_1810536_1610109'
